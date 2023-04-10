@@ -1,0 +1,30 @@
+import axios from "axios"
+import { useContext, useState } from "react"
+import { AuthContext } from "../../context/auth-context"
+
+export default function Form() {
+
+    const [email, setEmail] = useState("")
+    const [senha, setSenha] = useState("")
+
+    const {setEmail:setMail, setNome} = useContext(AuthContext)
+
+    async function auth(event){
+        event.preventDefault()
+        const {data} = await axios.post('https://api-products-dh-next.vercel.app/auth', {
+            email: email,
+            password: senha
+        })
+        setMail(data.email)
+        setNome(data.name)
+        console.log(data);
+    }
+
+    return(
+        <form onSubmit={auth}>
+            <input placeholder="email" type="email" value={email} onChange={(event)=> setEmail(event.target.value)}/>
+            <input placeholder="senha" type="password" value={senha} onChange={(event)=> setSenha(event.target.value)}/>
+            <input type="submit" />
+        </form>
+    )
+}
